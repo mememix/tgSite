@@ -6,15 +6,19 @@ module.exports = function(grunt) {
     pkg: grunt.file.readJSON('package.json'),
     config: {
       app: 'public',
-      dist: 'dist'
+      dist: 'dist',
+      tmp: '.tmp'
     },
     connect: {
       server: {
         options: {
           port: 9001,
-          base: '<%=config.app %>',
+          base: [
+            '.tmp',
+            '<%=config.app %>'
+          ],
           keepalive: false,
-          livereload: true, 
+          livereload: true,
           debug: true
         }
       }
@@ -28,10 +32,16 @@ module.exports = function(grunt) {
           'templates/**/*.ftl',
           'mocks/**/*.js'
         ],
-        tasks: ['freemarker', 'connect:server'],
+        tasks: ['freemarker:dev', 'connect:server'],
         options: {
           spawn: true
         }
+      },
+      less: {
+        files: [
+          '<%=config.app %>/styles/**/*.less'
+        ],
+        tasks: [ 'less:dev' ]
       }
     },
     freemarker: {
@@ -39,9 +49,53 @@ module.exports = function(grunt) {
         // Task-specific options go here.
         views: "templates"
       },
-      // Target-specific file lists and/or options go here.
-      src: "mocks/**/*.js"
+      dev: {
+        out: '.tmp',
+        // Target-specific file lists and/or options go here.
+        src: "mocks/**/*.js"
+      },
+      dist: {
+        out: 'public',
+        // Target-specific file lists and/or options go here.
+        src: "mocks/**/*.js"
+      }
     },
+
+    less: {
+      dev: {
+        compress: false,
+        sourceMap: false,
+        files: [{
+          expand: true,
+          cwd: '<%=config.app %>/styles',
+          src: '**/*.less',
+          dest: '<%=config.tmp %>/styles',
+          ext: '.css'
+        }]
+      },
+
+      dist: {
+          compress: true,
+          sourceMap: false,
+          files: [{
+            expand: true,
+            cwd: '<%= yeoman.app %>/styles',
+            src: '**/*.less',
+            dest: '<%=config.tmp %>/styles',
+            ext: '.css'
+          }]
+        }
+      },
+
+      clean: {
+        dev: {
+          files: [{
+            src: [
+              '<%=config.tmp %>'
+            ]
+          }]
+        }
+      }
 
   });
 
@@ -50,6 +104,6 @@ module.exports = function(grunt) {
 
   // Default task(s).
   grunt.registerTask('default', ['server']);
-  grunt.registerTask('server', ['freemarker', 'connect:server', 'watch']);
+  grunt.registerTask('server', ['freemarker:dev', 'less:dev', 'connect:server', 'watch']);
 
 };
