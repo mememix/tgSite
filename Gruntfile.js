@@ -107,10 +107,33 @@ module.exports = function(grunt) {
       },
 
       clean: {
-        dev: {
+        tmp: {
+          files: [{ src: ['<%=config.tmp %>'] }]
+        },
+        dist: {
+          files: [{ src: [ '<%=config.tmp %>', '<%=config.dist %>' ]}]
+        }
+      },
+
+      copy: {
+        dist: {
           files: [{
+            expand: true,
+            dot: true,
+            cwd: '<%= config.app %>',
+            dest: '<%= config.dist %>',
             src: [
-              '<%=config.tmp %>'
+              'js/**/*.js',
+              '!styles/**/*.less',
+              'styles/'
+            ]
+          }, {
+            expand: true,
+            dot: true,
+            cwd: '<%=config.tmp %>',
+            dest: '<%= config.dist %>',
+            src: [
+              '**/*'
             ]
           }]
         }
@@ -123,6 +146,7 @@ module.exports = function(grunt) {
 
   // Default task(s).
   grunt.registerTask('default', ['server']);
+  grunt.registerTask('build', ['clean:dist', 'freemarker:dev', 'less:dev', 'coffee:dev', 'copy:dist', 'clean:tmp' ]);
   grunt.registerTask('server', ['freemarker:dev', 'less:dev', 'coffee:dev', 'connect:server', 'watch']);
 
 };

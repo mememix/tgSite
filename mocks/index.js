@@ -1,6 +1,6 @@
 module.exports = {
   view: "/simple.ftl",
-  out: "/simple.html",
+  out: "/index.html",
   data: {
     name: "ijse"
   }
