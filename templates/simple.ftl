@@ -1,0 +1,5 @@
+view sample
+
+${name}
+
+
