@@ -42,6 +42,12 @@ module.exports = function(grunt) {
           '<%=config.app %>/styles/**/*.less'
         ],
         tasks: [ 'less:dev' ]
+      },
+      coffee: {
+        files: [
+          '<%=config.app %>/js/**/*.coffee'
+        ],
+        tasks: [ 'coffee:dev' ]
       }
     },
     freemarker: {
@@ -79,10 +85,23 @@ module.exports = function(grunt) {
           sourceMap: false,
           files: [{
             expand: true,
-            cwd: '<%= yeoman.app %>/styles',
+            cwd: '<%= config.app %>/styles',
             src: '**/*.less',
             dest: '<%=config.tmp %>/styles',
             ext: '.css'
+          }]
+        }
+      },
+
+      coffee: {
+        dev: {
+          sourceMap: true,
+          files: [{
+            expand: true,
+            cwd: '<%= config.app %>/js',
+            src: '**/*.coffee',
+            dest: '<%=config.tmp %>/js',
+            ext: '.js'
           }]
         }
       },
@@ -104,6 +123,6 @@ module.exports = function(grunt) {
 
   // Default task(s).
   grunt.registerTask('default', ['server']);
-  grunt.registerTask('server', ['freemarker:dev', 'less:dev', 'connect:server', 'watch']);
+  grunt.registerTask('server', ['freemarker:dev', 'less:dev', 'coffee:dev', 'connect:server', 'watch']);
 
 };
