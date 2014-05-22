@@ -1,5 +1,5 @@
 module.exports =[{
-  view: "/simple.ftl",
+  view: "/home.ftl",
   out: "/index.html",
   data: {
     name: "ijse"
