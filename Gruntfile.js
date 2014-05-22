@@ -25,16 +25,16 @@ module.exports = function(grunt) {
     },
     watch: {
       options: {
-        livereload: true
+        livereload: '<%=connect.server.options.livereload %>'
       },
       templates: {
         files: [
           'templates/**/*.ftl',
           'mocks/**/*.js'
         ],
-        tasks: ['freemarker:dev', 'connect:server'],
+        tasks: ['freemarker:dev'],
         options: {
-          spawn: true
+          spawn: false
         }
       },
       less: {
